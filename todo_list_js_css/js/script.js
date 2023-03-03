@@ -1,4 +1,5 @@
-const textInput = document.querySelector('.form-blk input');
+const textInput = document.querySelector('#todo_form input');
+var todoForm = document.getElementById('todo_form');
 const actionText = document.querySelector('.btn-group button');
 filters = document.querySelectorAll(".filter-blk span");
 taskBox = document.querySelector(".resultList");
@@ -7,9 +8,10 @@ var editId;
 var isEditedTask = false;
 
 // add data 
-textInput.addEventListener("keyup", e => {
+todoForm.addEventListener("submit", e => {
+    e.preventDefault();
     var todoList = textInput.value.trim();
-    if (e.key == "Enter" && todoList) {
+    if (todoList) {
         if (!isEditedTask) {
             if (!list) {
                 list = [];
@@ -25,6 +27,9 @@ textInput.addEventListener("keyup", e => {
         localStorage.setItem("todo-list", JSON.stringify(list));
         showToDo("all");
         total();
+    }
+    else {
+        alert('Please fill to do list');
     }
 });
 // to filt status 
@@ -43,16 +48,14 @@ function showToDo(filter) {
         list.forEach((todo, id) => {
             var isCompleted = todo.status == "completed" ? "checked" : "";
             if (filter == todo.status || filter == "all") {
-                li += `<li class="clearfix">
-                            <p class="list-blk">
-                                <label for="${id}">
-                                    <input type="checkbox" class="checkbox" id="${id}"  onclick="updateStatus(this)" ${isCompleted}>
-                                    <span class="todo_list ${isCompleted}">${todo.task}</span>
-                                </label>
-                                <small class="edit" onclick="editTask(${id},'${todo.task}')">(edit)</small>
-                                <b class="delete" onclick="deleteTask(${id})">x</b>
-                            </p>
-                        </li>`;
+                li += `<li class="list flex my-3">
+                        <p class="list-blk">
+                            <input type="checkbox" class="checkbox" value="${todo.task}" id="${id}" ${isCompleted} onclick="updateStatus(this)">
+                            <label class="task_name ${isCompleted} ${id}" ondblclick="editTaskList(${id},'${todo.task}')">${todo.task}</label>
+                            <b class="delete" value="${id}" onclick="deleteTask(${id})">x</b>
+                        </p>
+                        <input type="text" class="edit hide w-full border border-inherit ${id}" value="${todo.task}" id="${id}" ${isCompleted} onclick="updateTask(${id})">
+                    </li>`;
             }
         });
     }
@@ -63,11 +66,27 @@ function showToDo(filter) {
 showToDo("all");
 total();
 // edit task list 
-function editTask(taskId, taskName) {
-    editId = taskId;
-    isEditedTask = true;
-    textInput.value = taskName;
-
+function editTaskList(taskId, taskName) {
+    var checkBox = document.getElementsByClassName("checkbox");
+    var textBox = document.getElementsByClassName("edit");
+    var task_name = document.getElementsByClassName("task_name");
+    var closeBtn = document.getElementsByClassName("delete");
+    checkBox[taskId].classList.add("hide");
+    textBox[taskId].classList.remove('hide');
+    textBox[taskId].classList.add("editTextBox");
+    task_name[taskId].classList.add('hide');
+    closeBtn[taskId].classList.add('hide');
+    var test = task_name.closest('.edit');
+}
+function updateTask(taskId) {
+    var textBox = document.getElementsByClassName("edit");
+    textBox[taskId].addEventListener('blur', e => {
+        var oldTask = textBox[taskId].value;
+        list[taskId].task = oldTask;
+        localStorage.setItem("todo-list", JSON.stringify(list));
+        showToDo("all");
+        total();
+    })
 }
 // delete task 
 function deleteTask(taskId) {
@@ -79,10 +98,9 @@ function deleteTask(taskId) {
 // check all
 function checkAll() {
     const checkboxes = document.getElementsByClassName("checkbox");
-    const task_list = document.getElementsByClassName("todo_list");
+    const task_list = document.getElementsByClassName("task_name");
 
     var len = task_list.length;
-
     if (actionText.innerText == "Check All") {
         actionText.innerHTML = "Uncheck All";
         for ($i = 0; $i < len; $i++) {
@@ -100,6 +118,7 @@ function checkAll() {
         }
     }
     localStorage.setItem("todo-list", JSON.stringify(list));
+    showToDo("all");
     total();
 }
 
@@ -123,6 +142,7 @@ function updateStatus(selectedTask) {
         list[selectedTask.id].status = "pending";
     }
     localStorage.setItem("todo-list", JSON.stringify(list));
+    showToDo("all");
     total();
 }
 // to show complete total task list

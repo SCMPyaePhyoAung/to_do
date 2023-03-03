@@ -75,16 +75,15 @@
     text-align: center;
 }
 
-ul li {
+.resultList .list {
     list-style-type: none;
     padding: 10px 0;
 }
 
-ul li.checked {
+.resultList .list.checked {
     text-decoration: line-through;
 }
 
-/* Style the close button */
 .close {
     cursor: pointer;
     padding: 10px;
@@ -94,22 +93,25 @@ ul li.checked {
     float: left;
 }
 
-ul li .delete {
+.resultList .list .delete {
     float: right;
 }
 
-.delete,
-.edit {
+.delete {
     color: #ff0000;
     cursor: pointer;
     padding: 3px;
 }
 
-ul li span.checked {
+.resultList .list label.checked {
     text-decoration: line-through;
 }
 
 .hide {
     display: none !important;
-    background-color: red;
+}
+
+.editTextBox {
+    width: 100%;
+    padding: 5px;
 }
