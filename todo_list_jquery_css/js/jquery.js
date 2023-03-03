@@ -12,7 +12,7 @@ $(document).ready(function () {
         list.push(task);
         localStorage.setItem("task", JSON.stringify(list));
         $("#input").val("");
-        showData();
+        total();
     });
     // make complete
     $("ul").on("click", ".checkbox", function () {
@@ -27,6 +27,7 @@ $(document).ready(function () {
             list[id].status = "active";
         }
         localStorage.setItem("task", JSON.stringify(list));
+        total();
     });
     // delete task list
     $("ul").on("click", ".delete", function () {
@@ -34,6 +35,7 @@ $(document).ready(function () {
         var taskId = $(this).val();
         list.splice(taskId, 1);
         localStorage.setItem("task", JSON.stringify(list));
+        total();
     });
     // edit task list name
     $("ul").on("dblclick", ".task_name", function () {
@@ -53,7 +55,6 @@ $(document).ready(function () {
         var id = $(this).attr('id');
         list[id].task = $(this).val();
         localStorage.setItem("task", JSON.stringify(list));
-        showData();
     });
     // check all task list
     $("#btn-checkall").click(function () {
@@ -74,6 +75,7 @@ $(document).ready(function () {
             }
         }
         localStorage.setItem("task", JSON.stringify(list));
+        total();
     });
     //delete all
     $("#btn-deleteall").click(function () {
@@ -81,38 +83,41 @@ $(document).ready(function () {
         var todelete = list.filter(todo => todo.status == "completed");
         list.splice(todelete, todelete.length);
         localStorage.setItem("task", JSON.stringify(list));
+        total();
     });
-
     // to filt status 
-    filters.forEach(btn => {
+    $.each(filters, function (btn, btn) {
         btn.addEventListener("click", () => {
             document.querySelector("span.active").classList.remove("active");
             btn.classList.add("active");
             showData(btn.id);
         });
-        // show data function 
-        function showData(filter) {
-            var li = "";
-            var list = JSON.parse(localStorage.getItem("task"));
-            if (list) {
-                list.forEach((todo, id) => {
-                    var isCompleted = todo.status == "completed" ? "checked" : "";
-                    if (filter == todo.status || filter == "all") {
-                        li += `<li class="clearfix">
-                            <p class="list-blk">
-                                  <input type="checkbox" class="checkbox"  value="${todo.task}" id="${id}" ${isCompleted}><label class="${isCompleted} task_name">${todo.task}</label>
-                                  <button class="delete" value="${id}">x</button>
-                            </p>
-                        </li>`;
-                    }
-                });
-            }
-            $('.resultList').append(li);
-        }
-        showData();
     });
+    // show data function 
+    function showData(filter) {
+        var li = "";
+        var list = JSON.parse(localStorage.getItem("task"));
+        if (list) {
+            $.each(list, function (id, todo) {
+                var isCompleted = todo.status == "completed" ? "checked" : "";
+                if (filter == todo.status || filter == "all") {
+                    li += `<li class="clearfix">
+                                    <p class="list-blk">
+                                        <input type="checkbox" class="checkbox"  value="${todo.task}" id="${id}" ${isCompleted}><label class="${isCompleted} task_name">${todo.task}</label>
+                                        <button class="delete" value="${id}">x</button>
+                                    </p>
+                                </li>`;
+                }
+            });
+        }
+        $('.resultList').append(li);
+    }
     // to show complete total task list
-    var todelete = list.filter(todo => todo.status == "active");
-    var total = todelete.length;
-    $('#total').text(total);
+    function total() {
+        var todelete = list.filter(todo => todo.status == "active");
+        var total = todelete.length;
+        $('#total').text(total);
+    }
+    showData("all");
+    total();
 });
