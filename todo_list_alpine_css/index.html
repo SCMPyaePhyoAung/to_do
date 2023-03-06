@@ -70,9 +70,9 @@
               <input type="checkbox" class="checkbox" x-model="todo.completed">
               <label class="task_name" x-text="todo.text" x-bind:class="{'completed': todo.completed}" @click.prevent
                 @dblclick="updateTask" x-show="!isEditing"></label>
-              <input type="text" x-model="todo.text" x-show="isEditing" @click.away="updateTask"
+              <input type="text" class="editTextBox" x-model="todo.text" x-show="isEditing" @click.away="updateTask"
                 @keydown.enter="disableEditing" @keydown.window.escape="disableEditing"
-                class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 appearance-none leading-normal w-128"
+                class=""
                 x-ref="input">
             </div>
             <b class="delete" @click="todos = todos.filter(t => t.id !== todo.id)">x</b>
@@ -82,14 +82,13 @@
       </ul>
       <h5 class="total"><span x-text="todos.filter((todo) => todo.completed != true).length"></span> items left</h5>
       <div class="btn-group">
-        <button class="btn btn-action">Check All</button>
+        <button class="btn btn-action" id="btn_check" @click="checkAll">Check All</button>
         <button class="btn btn-action" @click="todos = todos.filter(t => t.completed != true)">
           Clear Completed
         </button>
       </div>
     </div>
   </div>
-
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="js/script.js"></script>
 </body>
