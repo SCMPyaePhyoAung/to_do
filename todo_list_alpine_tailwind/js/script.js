@@ -3,15 +3,9 @@ function badId() {
 }
 function data() {
     return {
-        text: "Example text. Double click to edit",
         isEditing: false,
         updateTask() {
             this.isEditing = !this.isEditing;
-            if (this.isEditing) {
-                this.$nextTick(() => {
-                    this.$refs.input.focus();
-                });
-            }
         },
         disableEditing() {
             this.isEditing = false;
@@ -36,7 +30,7 @@ function showCompleted() {
     active.classList.add('hide');
     completed.classList.remove('hide');
 }
-function checkAll(){
+function checkAll() {
     var checkboxes = document.querySelectorAll('.checkbox');
     var check = document.getElementById('btn_check');
     var labels = document.querySelectorAll('.task_name');
@@ -46,7 +40,7 @@ function checkAll(){
         check.innerHTML = "Uncheck All";
         for ($i = 0; $i < todos.length; $i++) {
             todos[$i].completed = true;
-            checkboxes[$i].checked=true;
+            checkboxes[$i].checked = true;
             labels[$i].classList.add('completed');
         }
     }
@@ -54,7 +48,7 @@ function checkAll(){
         check.innerHTML = "Check All";
         for ($i = 0; $i < todos.length; $i++) {
             todos[$i].completed = false;
-            checkboxes[$i].checked=false;
+            checkboxes[$i].checked = false;
             labels[$i].classList.remove('completed');
         }
     }

@@ -86,7 +86,7 @@
             <div class="flex" x-data="data()">
               <input type="checkbox" class="mr-2 my-auto checkbox" x-model="todo.completed">
               <label class="task_name my-auto" x-text="todo.text" x-bind:class="{'completed': todo.completed}"
-                @click.prevent @dblclick="updateTask" x-show="!isEditing"></label>
+                @dblclick="updateTask" x-show="!isEditing"></label>
               <input type="text" x-model="todo.text" x-show="isEditing" @click.away="updateTask"
                 @keydown.enter="disableEditing" @keydown.window.escape="disableEditing"
                 class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 appearance-none leading-normal w-128"
