@@ -105,7 +105,7 @@
         left</h5>
     </form>
     <div class="action flex">
-      <button class="mx-1 text-medium font-medium bg-stone-100 text-gray-500 px-3 py-2 rounded w-full">Check
+      <button class="mx-1 text-medium font-medium bg-stone-100 text-gray-500 px-3 py-2 rounded w-full" id="btn_check" @click="checkAll">Check
         All</button>
       <button class="mx-1 text-medium font-medium bg-stone-100 text-gray-500 px-3 py-2 rounded w-full"
         @click="todos = todos.filter(t => t.completed != true)">Clear Completed</button>
