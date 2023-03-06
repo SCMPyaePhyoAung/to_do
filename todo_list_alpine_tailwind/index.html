@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
+  <link rel="stylesheet" href="css/style.css" />
+
+</head>
+
+<body class="">
+  <div class="container bg-stone-50 mx-auto my-auto p-5 w-1/2 mt-20 shadow-md"
+    x-data="{ newTodo: '', todos: JSON.parse(localStorage.getItem('todos') || '[]') }"
+    x-init="$watch('todos', (val) => localStorage.setItem('todos', JSON.stringify(val)))">
+    <h1 class="py-2 font-semibold">Todo</h1>
+    <form
+      @submit.stop.prevent="todos = [].concat({ id: badId(), text: newTodo, completed: false }, todos); newTodo = '';">
+      <div class="flex py-3">
+        <div class="w-full form-blk">
+          <input type="text" name="todo" id="input" class="todo w-full border border-inherit" x-model="newTodo">
+        </div>
+        <div class="w-auto mx-1">
+          <button class="ml-auto text-medium font-bold bg-blue-500 text-white px-3 py-2 rounded" id="btn-submit">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="filter-blk flex">
+        <span @click="showAll"
+          class="mx-1 text-center font-medium bg-neutral-100 text-gray-500 px-3 py-2 rounded w-full active">All</span>
+        <span @click="showActive"
+          class="mx-1 text-center font-medium bg-neutral-100 text-gray-500 px-3 py-2 rounded w-full">Active</span>
+        <span @click="showCompleted"
+          class="mx-1 text-center font-medium bg-neutral-100 text-gray-500 px-3 py-2 rounded w-full">Completed</span>
+      </div>
+      <ul class="resultList" id="all">
+        <template x-for="todo in todos">
+          <li class="list my-3">
+            <div class="flex" x-data="data()">
+              <input type="checkbox" class="mr-2 my-auto checkbox" x-model="todo.completed">
+              <label class="task_name my-auto" x-text="todo.text" x-bind:class="{'completed': todo.completed}"
+                @click.prevent @dblclick="updateTask" x-show="!isEditing"></label>
+              <input type="text" x-model="todo.text" x-show="isEditing" @click.away="updateTask"
+                @keydown.enter="disableEditing" @keydown.window.escape="disableEditing"
+                class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 appearance-none leading-normal w-128"
+                x-ref="input">
+              <b class="delete ml-auto text-red-500" @click="todos = todos.filter(t => t.id !== todo.id)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </b>
+            </div>
+          </li>
+        </template>
+      </ul>
+      <ul class="resultList hide" id="active">
+        <template x-for="todo in todos.filter(t => t.completed != true)">
+          <li class="list my-3">
+            <div class="flex" x-data="data()">
+              <input type="checkbox" class="mr-2 my-auto checkbox" x-model="todo.completed">
+              <label class="task_name my-auto" x-text="todo.text" x-bind:class="{'completed': todo.completed}"
+                @click.prevent @dblclick="updateTask" x-show="!isEditing"></label>
+              <input type="text" x-model="todo.text" x-show="isEditing" @click.away="updateTask"
+                @keydown.enter="disableEditing" @keydown.window.escape="disableEditing"
+                class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 appearance-none leading-normal w-128"
+                x-ref="input">
+              <b class="delete ml-auto text-red-500" @click="todos = todos.filter(t => t.id !== todo.id)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </b>
+            </div>
+          </li>
+        </template>
+      </ul>
+      <ul class="resultList hide" id="completed">
+        <template x-for="todo in todos.filter(t => t.completed != false)">
+          <li class="list my-3">
+            <div class="flex" x-data="data()">
+              <input type="checkbox" class="mr-2 my-auto checkbox" x-model="todo.completed">
+              <label class="task_name my-auto" x-text="todo.text" x-bind:class="{'completed': todo.completed}"
+                @click.prevent @dblclick="updateTask" x-show="!isEditing"></label>
+              <input type="text" x-model="todo.text" x-show="isEditing" @click.away="updateTask"
+                @keydown.enter="disableEditing" @keydown.window.escape="disableEditing"
+                class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 appearance-none leading-normal w-128"
+                x-ref="input">
+              <b class="delete ml-auto text-red-500" @click="todos = todos.filter(t => t.id !== todo.id)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </b>
+            </div>
+          </li>
+        </template>
+      </ul>
+      <h5 class="total text-gray-400"><span x-text="todos.filter((todo) => todo.completed != true).length"></span> items
+        left</h5>
+    </form>
+    <div class="action flex">
+      <button class="mx-1 text-medium font-medium bg-stone-100 text-gray-500 px-3 py-2 rounded w-full">Check
+        All</button>
+      <button class="mx-1 text-medium font-medium bg-stone-100 text-gray-500 px-3 py-2 rounded w-full"
+        @click="todos = todos.filter(t => t.completed != true)">Clear Completed</button>
+    </div>
+  </div>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>
