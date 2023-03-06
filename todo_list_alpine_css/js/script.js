@@ -1,0 +1,38 @@
+function badId() {
+    return (Math.random() * 100).toFixed(0);
+}
+function data() {
+    return {
+        text: "Example text. Double click to edit",
+        isEditing: false,
+        updateTask() {
+            this.isEditing = !this.isEditing;
+            if (this.isEditing) {
+                this.$nextTick(() => {
+                    this.$refs.input.focus();
+                });
+            }
+        },
+        disableEditing() {
+            this.isEditing = false;
+        }
+    };
+}
+var all = document.getElementById('all');
+var active = document.getElementById('active');
+var completed = document.getElementById('completed');
+function showAll() {
+    all.classList.remove('hide');
+    active.classList.add('hide');
+    completed.classList.add('hide');
+}
+function showActive() {
+    all.classList.add('hide');
+    active.classList.remove('hide');
+    completed.classList.add('hide');
+}
+function showCompleted() {
+    all.classList.add('hide');
+    active.classList.add('hide');
+    completed.classList.remove('hide');
+}
