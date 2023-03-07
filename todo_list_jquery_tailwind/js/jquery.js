@@ -50,7 +50,7 @@ $(document).ready(function () {
                 }
             });
         }
-        $('.resultList').append(li);
+        $('.resultList').empty().append(li);
     }
     // make complete
     $("ul").on("click", ".checkbox", function () {
@@ -84,7 +84,6 @@ $(document).ready(function () {
         $(this).hide();
         $(this).closest("li").find("button").hide();
         total();
-        showData("all");
     });
     // update task list name
     $("ul").on("blur", ".edit_checkbox", function () {
@@ -109,7 +108,12 @@ $(document).ready(function () {
         $(".task_name").toggleClass("checked");
         var len = $('.task_name').length;
         if ($(this).text() == "Check All") {
-            $(this).text("Uncheck All");
+            if (!len > 0) {
+                alert("There is no task to check");
+            }
+            else {
+                $(this).text("Uncheck All");
+            }
             for ($i = 0; $i < len; $i++) {
                 $(".checkbox").attr("checked", true);
                 list[$i].status = "completed";
@@ -128,19 +132,19 @@ $(document).ready(function () {
     });
     //delete all
     $("#btn-deleteall").click(function () {
-        var list = JSON.parse(localStorage.getItem("task"));
-        var todelete = list.filter(todo => todo.status == "completed");
-        list.splice(todelete, todelete.length);
+        list = list.filter(todo => todo.status != "completed");
         localStorage.setItem("task", JSON.stringify(list));
+        $('#btn-checkall').text("Check All");
         total();
         showData("all");
     });
     // to show complete total task list
     function total() {
-        var todelete = list.filter(todo => todo.status == "active");
-        var total = todelete.length;
-        $('#total').text(total);
-
+        if (list) {
+            var todelete = list.filter(todo => todo.status == "active");
+            var total = todelete.length;
+            $('#total').text(total);
+        }
     }
     showData("all");
     total();
