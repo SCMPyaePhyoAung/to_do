@@ -66,7 +66,6 @@ function showToDo(filter) {
     taskBox.innerHTML = li;
     total();
 }
-
 showToDo("all");
 total();
 // edit task list 
@@ -80,25 +79,24 @@ function editTaskList(taskId) {
     textBox[taskId].classList.add("editTextBox");
     task_name[taskId].classList.add('hide');
     closeBtn[taskId].classList.add('hide');
-    task_name.closest('.edit');
 }
 function updateTask(taskId) {
     var textBox = document.getElementsByClassName("edit");
-    if(textBox){
+    if (textBox) {
         textBox[taskId].addEventListener('blur', e => {
             var oldTask = textBox[taskId].value;
-            if(!oldTask.trim().length<1){
+            if (!oldTask.trim().length < 1) {
                 list[taskId].task = oldTask;
                 localStorage.setItem("todo-list", JSON.stringify(list));
             }
-            else{
+            else {
                 alert("Task cannot be empty");
             }
             showToDo("all");
             total();
         })
     }
-    else{
+    else {
         alert("Task cannot be empty");
     }
 }
@@ -121,7 +119,12 @@ function checkAll() {
 
     var len = task_list.length;
     if (actionText.innerText == "Check All") {
-        actionText.innerHTML = "Uncheck All";
+        if (!task_list.length > 0) {
+            alert("There is no task to check");
+        }
+        else {
+            actionText.innerHTML = "Uncheck All";
+        }
         for ($i = 0; $i < len; $i++) {
             task_list[$i].classList.add("checked");
             checkboxes[$i].checked = true;
@@ -140,12 +143,11 @@ function checkAll() {
     showToDo("all");
     total();
 }
-
 // delete all complete task 
 function deleteAllComplete() {
-    var todelete = list.filter(todo => todo.status == "completed");
-    list.splice(todelete, todelete.length);
+    list = list.filter(todo => todo.status != "completed");
     localStorage.setItem("todo-list", JSON.stringify(list));
+    actionText.innerHTML = "Uncheck All";
     showToDo("all");
     total();
 }
@@ -166,9 +168,11 @@ function updateStatus(selectedTask) {
 }
 // to show complete total task list
 function total() {
-    var total_active = list.filter(todo => todo.status == "pending");
-    var total = total_active.length;
-    document.getElementById("total").innerText = total;
+    if (list) {
+        var total_active = list.filter(todo => todo.status == "pending");
+        var total = total_active.length;
+        document.getElementById("total").innerText = total;
+    }
 }
 showToDo("all");
 total();
