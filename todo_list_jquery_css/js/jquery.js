@@ -4,15 +4,20 @@ $(document).ready(function () {
     // add list
     $("#todo-form").on("submit", function (e) {
         e.preventDefault();
-        var input = $("#input").val();
+        var input = $("#input").val().trim();
         if (!list) {
             list = [];
         }
-        var task = { task: input, status: "active" };
-        list.push(task);
-        localStorage.setItem("task", JSON.stringify(list));
-        $("#input").val("");
-        total();
+        if (!input.length < 1) {
+            var task = { task: input, status: "active" };
+            list.push(task);
+            localStorage.setItem("task", JSON.stringify(list));
+            $("#input").val("");
+            total();
+        }
+        else {
+            alert("Task cannot be empty.");
+        }
     });
     // make complete
     $("ul").on("click", ".checkbox", function () {
@@ -53,8 +58,14 @@ $(document).ready(function () {
         $(this).closest("li").find("label").show();
         $(this).closest("li").find("button").show();
         var id = $(this).attr('id');
-        list[id].task = $(this).val();
-        localStorage.setItem("task", JSON.stringify(list));
+        if (!$(this).val().trim() < 1) {
+            list[id].task = $(this).val();
+            localStorage.setItem("task", JSON.stringify(list));
+        }
+        else {
+            alert("Task cannot be empty.");
+        }
+
     });
     // check all task list
     $("#btn-checkall").click(function () {
@@ -101,16 +112,15 @@ $(document).ready(function () {
             $.each(list, function (id, todo) {
                 var isCompleted = todo.status == "completed" ? "checked" : "";
                 if (filter == todo.status || filter == "all") {
-                    li += `<li class="clearfix">
+                    $('.resultList').append(`<li class="clearfix">
                                     <p class="list-blk">
                                         <input type="checkbox" class="checkbox"  value="${todo.task}" id="${id}" ${isCompleted}><label class="${isCompleted} task_name">${todo.task}</label>
                                         <button class="delete" value="${id}">x</button>
                                     </p>
-                                </li>`;
+                                </li>`);
                 }
             });
         }
-        $('.resultList').append(li);
     }
     // to show complete total task list
     function total() {
