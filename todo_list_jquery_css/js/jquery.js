@@ -2,9 +2,9 @@ $(document).ready(function () {
     var list = JSON.parse(localStorage.getItem("task"));
     filters = document.querySelectorAll(".filter-blk span");
     // add list
-    $("#todo-form").on("submit", function (e) {
+    $("#form").on("submit", function (e) {
         e.preventDefault();
-        var input = $("#input").val().trim();
+        var input = $(".text_box").val().trim();
         if (!list) {
             list = [];
         }
@@ -12,13 +12,53 @@ $(document).ready(function () {
             var task = { task: input, status: "active" };
             list.push(task);
             localStorage.setItem("task", JSON.stringify(list));
-            $("#input").val("");
+            $(".text_box").val("");
+            var id = list.length - 1;
+            var li = "";
+            if (list) {
+                var isCompleted = list[id].status == "completed" ? "checked" : "";
+                li += `<li class="clearfix">
+                                   <p class="list-blk">
+                                       <input type="checkbox" class="checkbox"  value="${input}" id="${id}" ${isCompleted}><label class="${isCompleted} task_name">${input}</label>
+                                       <button class="delete" value="${id}">x</button>
+                                   </p>
+                         </li>`;
+                $('.resultList').append(li);
+            }
             total();
         }
         else {
             alert("Task cannot be empty.");
         }
+
     });
+    // to filt status 
+    $.each(filters, function (btn, btn) {
+        btn.addEventListener("click", () => {
+            document.querySelector("span.active").classList.remove("active");
+            btn.classList.add("active");
+            showData(btn.id);
+        });
+    });
+    // show data function 
+    function showData(filter) {
+        var li = "";
+        var list = JSON.parse(localStorage.getItem("task"));
+        if (list) {
+            $.each(list, function (id, todo) {
+                var isCompleted = todo.status == "completed" ? "checked" : "";
+                if (filter == todo.status || filter == "all") {
+                    li += `<li class="clearfix">
+                                        <p class="list-blk">
+                                            <input type="checkbox" class="checkbox"  value="${todo.task}" id="${id}" ${isCompleted}><label class="${isCompleted} task_name">${todo.task}</label>
+                                            <button class="delete" value="${id}">x</button>
+                                        </p>
+                              </li>`;
+                }
+            });
+            $('.resultList').empty().append(li);
+        }
+    }
     // make complete
     $("ul").on("click", ".checkbox", function () {
         $(this).closest("li").find(".task_name").toggleClass("checked");
@@ -33,6 +73,7 @@ $(document).ready(function () {
         }
         localStorage.setItem("task", JSON.stringify(list));
         total();
+
     });
     // delete task list
     $("ul").on("click", ".delete", function () {
@@ -56,20 +97,22 @@ $(document).ready(function () {
         $(this).closest("li").find("input").removeClass("edit_checkbox");
         $(this).closest("li").find("input").addClass("checkbox");
         $(this).closest("li").find("label").show();
+        $(this).closest("li").find("label").text($(this).val().trim());
         $(this).closest("li").find("button").show();
         var id = $(this).attr('id');
         if (!$(this).val().trim() < 1) {
+
             list[id].task = $(this).val();
             localStorage.setItem("task", JSON.stringify(list));
         }
         else {
             alert("Task cannot be empty.");
         }
+        showData("all");
 
     });
     // check all task list
     $("#btn-checkall").click(function () {
-        $(".task_name").toggleClass("checked");
         var len = $('.task_name').length;
         if ($(this).text() == "Check All") {
             $(this).text("Uncheck All");
@@ -86,48 +129,25 @@ $(document).ready(function () {
             }
         }
         localStorage.setItem("task", JSON.stringify(list));
+        showData("all");
         total();
     });
     //delete all
     $("#btn-deleteall").click(function () {
-        var list = JSON.parse(localStorage.getItem("task"));
-        var todelete = list.filter(todo => todo.status == "completed");
-        list.splice(todelete, todelete.length);
+        list = list.filter(todo => todo.status != "completed");
         localStorage.setItem("task", JSON.stringify(list));
+        $('#btn-checkall').text("Check All");
         total();
+        showData("all");
     });
-    // to filt status 
-    $.each(filters, function (btn, btn) {
-        btn.addEventListener("click", () => {
-            document.querySelector("span.active").classList.remove("active");
-            btn.classList.add("active");
-            showData(btn.id);
-        });
-    });
-    // show data function 
-    function showData(filter) {
-        var li = "";
-        var list = JSON.parse(localStorage.getItem("task"));
-        if (list) {
-            $.each(list, function (id, todo) {
-                var isCompleted = todo.status == "completed" ? "checked" : "";
-                if (filter == todo.status || filter == "all") {
-                    $('.resultList').append(`<li class="clearfix">
-                                    <p class="list-blk">
-                                        <input type="checkbox" class="checkbox"  value="${todo.task}" id="${id}" ${isCompleted}><label class="${isCompleted} task_name">${todo.task}</label>
-                                        <button class="delete" value="${id}">x</button>
-                                    </p>
-                                </li>`);
-                }
-            });
-        }
-    }
     // to show complete total task list
     function total() {
-        var todelete = list.filter(todo => todo.status == "active");
-        var total = todelete.length;
-        $('#total').text(total);
+        if (list) {
+            activeTotal = list.filter(todo => todo.status == "active");
+            var total = activeTotal.length;
+            $('#total').text(total);
+        }
     }
-    showData("all");
     total();
+    showData("all");
 });
