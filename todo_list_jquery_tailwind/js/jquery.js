@@ -4,17 +4,54 @@ $(document).ready(function () {
     // add list
     $("#todo-form").on("submit", function (e) {
         e.preventDefault();
-        var input = $("#input").val();
+        var input = $("#input").val().trim();
         if (!list) {
             list = [];
         }
         var task = { task: input, status: "active" };
-        list.push(task);
-        localStorage.setItem("task", JSON.stringify(list));
+        if (!input.length < 1) {
+            list.push(task);
+            localStorage.setItem("task", JSON.stringify(list));
+        }
+        else {
+            alert("Task cannot be empty.");
+        }
         $("#input").val("");
         total();
-
+        showData("all");
     });
+    // to filt status 
+    $.each(filters, function (id, btn) {
+        btn.addEventListener("click", () => {
+            document.querySelector("span.active").classList.remove("active");
+            btn.classList.add("active");
+            showData(btn.id);
+        });
+    });
+    // show data function 
+    function showData(filter) {
+        var li = "";
+        var list = JSON.parse(localStorage.getItem("task"));
+        if (list) {
+            $.each(list, function (id, todo) {
+                var isCompleted = todo.status == "completed" ? "checked" : "";
+                if (filter == todo.status || filter == "all") {
+                    li += `<li class="list flex my-3">
+                                    <p class="list-blk"></p>
+                                    <input type="checkbox" class="mr-2 my-auto checkbox" value="${todo.task}" id="${id}" ${isCompleted}>
+                                    <label class="${isCompleted} task_name">${todo.task}</label>
+                                    <button class="delete ml-auto text-red-500" value="${id}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    </button>
+                                    </p>
+                                </li>`;
+                }
+            });
+        }
+        $('.resultList').append(li);
+    }
     // make complete
     $("ul").on("click", ".checkbox", function () {
         $(this).closest("li").find(".task_name").toggleClass("checked");
@@ -28,7 +65,7 @@ $(document).ready(function () {
         }
         localStorage.setItem("task", JSON.stringify(list));
         total();
-
+        showData("all");
     });
     // delete task list
     $("ul").on("click", ".delete", function () {
@@ -37,7 +74,7 @@ $(document).ready(function () {
         list.splice(taskId, 1);
         localStorage.setItem("task", JSON.stringify(list));
         total();
-
+        showData("all");
     });
     // edit task list name
     $("ul").on("dblclick", ".task_name", function () {
@@ -47,7 +84,7 @@ $(document).ready(function () {
         $(this).hide();
         $(this).closest("li").find("button").hide();
         total();
-
+        showData("all");
     });
     // update task list name
     $("ul").on("blur", ".edit_checkbox", function () {
@@ -57,10 +94,15 @@ $(document).ready(function () {
         $(this).closest("li").find("label").show();
         $(this).closest("li").find("button").show();
         var id = $(this).attr('id');
-        list[id].task = $(this).val();
-        localStorage.setItem("task", JSON.stringify(list));
+        if (!$(this).val().trim() < 1) {
+            list[id].task = $(this).val().trim();
+            localStorage.setItem("task", JSON.stringify(list));
+        }
+        else {
+            alert("Task cannnot be empty");
+        }
         total();
-
+        showData("all");
     });
     // check all task list
     $("#btn-checkall").click(function () {
@@ -82,7 +124,7 @@ $(document).ready(function () {
         }
         localStorage.setItem("task", JSON.stringify(list));
         total();
-
+        showData("all");
     });
     //delete all
     $("#btn-deleteall").click(function () {
@@ -91,40 +133,8 @@ $(document).ready(function () {
         list.splice(todelete, todelete.length);
         localStorage.setItem("task", JSON.stringify(list));
         total();
-
+        showData("all");
     });
-    // to filt status 
-    $.each(filters, function (id, btn) {
-        btn.addEventListener("click", () => {
-            document.querySelector("span.active").classList.remove("active");
-            btn.classList.add("active");
-            showData(btn.id);
-        });
-    });
-    // show data function 
-    function showData(filter) {
-        var li = "";
-        var list = JSON.parse(localStorage.getItem("task"));
-        if (list) {
-            $.each(list, function (id, todo) {
-                var isCompleted = todo.status == "completed" ? "checked" : "";
-                if (filter == todo.status || filter == "all") {
-                    li += `<li class="list flex my-3">
-                                <p class="list-blk"></p>
-                                <input type="checkbox" class="mr-2 my-auto checkbox" value="${todo.task}" id="${id}" ${isCompleted}>
-                                <label class="${isCompleted} task_name">${todo.task}</label>
-                                <button class="delete ml-auto text-red-500" value="${id}">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                                </button>
-                                </p>
-                            </li>`;
-                }
-            });
-        }
-        $('.resultList').append(li);
-    }
     // to show complete total task list
     function total() {
         var todelete = list.filter(todo => todo.status == "active");
