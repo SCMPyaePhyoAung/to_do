@@ -62,7 +62,6 @@ function showToDo(filter) {
     taskBox.innerHTML = li;
     total();
 }
-
 showToDo("all");
 total();
 // edit task list 
@@ -82,8 +81,18 @@ function updateTask(taskId) {
     var textBox = document.getElementsByClassName("edit");
     textBox[taskId].addEventListener('blur', e => {
         var oldTask = textBox[taskId].value;
-        list[taskId].task = oldTask;
-        localStorage.setItem("todo-list", JSON.stringify(list));
+        if(oldTask){
+            if(!oldTask.trim().length<1){
+                list[taskId].task = oldTask.trim();
+                localStorage.setItem("todo-list", JSON.stringify(list));
+            }
+            else{
+                alert("Task cannot be empty");
+            }
+        }
+        else{
+            alert("Task cannot be empty");
+        }
         showToDo("all");
         total();
     })
