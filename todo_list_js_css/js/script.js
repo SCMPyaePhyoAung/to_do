@@ -111,7 +111,12 @@ function checkAll() {
 
     var len = task_list.length;
     if (actionText.innerText == "Check All") {
-        actionText.innerHTML = "Uncheck All";
+        if(task_list.length == 0){
+            alert("There is do task to check.");
+        }
+        else{
+            actionText.innerHTML = "Uncheck All";
+        }
         for ($i = 0; $i < len; $i++) {
             task_list[$i].classList.add("checked");
             checkboxes[$i].checked = true;
@@ -133,9 +138,9 @@ function checkAll() {
 
 // delete all complete task 
 function deleteAllComplete() {
-    var todelete = list.filter(todo => todo.status == "completed");
-    list.splice(todelete, todelete.length);
+    list = list.filter(todo => todo.status != "completed");
     localStorage.setItem("todo-list", JSON.stringify(list));
+    actionText.innerHTML = "Check All";
     showToDo("all");
     total();
 }
@@ -156,9 +161,11 @@ function updateStatus(selectedTask) {
 }
 // to show complete total task list
 function total() {
+   if(list){
     var total_active = list.filter(todo => todo.status == "pending");
     var total = total_active.length;
     document.getElementById("total").innerText = total;
+   }
 }
-showToDo("all");
 total();
+showToDo("all");
