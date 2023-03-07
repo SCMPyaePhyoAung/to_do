@@ -29,7 +29,7 @@ todoForm.addEventListener("submit", e => {
         total();
     }
     else {
-        
+        alert("Task cannot be empty");
     }
 });
 // to filt status 
@@ -84,13 +84,23 @@ function editTaskList(taskId) {
 }
 function updateTask(taskId) {
     var textBox = document.getElementsByClassName("edit");
-    textBox[taskId].addEventListener('blur', e => {
-        var oldTask = textBox[taskId].value;
-        list[taskId].task = oldTask;
-        localStorage.setItem("todo-list", JSON.stringify(list));
-        showToDo("all");
-        total();
-    })
+    if(textBox){
+        textBox[taskId].addEventListener('blur', e => {
+            var oldTask = textBox[taskId].value;
+            if(!oldTask.trim().length<1){
+                list[taskId].task = oldTask;
+                localStorage.setItem("todo-list", JSON.stringify(list));
+            }
+            else{
+                alert("Task cannot be empty");
+            }
+            showToDo("all");
+            total();
+        })
+    }
+    else{
+        alert("Task cannot be empty");
+    }
 }
 function editTask(taskId, taskName) {
     editId = taskId;
