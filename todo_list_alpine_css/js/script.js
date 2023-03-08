@@ -15,23 +15,27 @@ function data() {
         }
     };
 }
-var all = document.getElementById('all');
-var active = document.getElementById('active');
-var completed = document.getElementById('completed');
-function showAll() {
-    all.classList.remove('hide');
-    active.classList.add('hide');
-    completed.classList.add('hide');
+function changeStatus(id){
+    var todos = JSON.parse(localStorage.getItem("todos"));
+    if(todos[id-1].completed == false){
+        todos[id-1].completed = true;
+    }
+    else{
+        todos[id-1].completed = false;
+    }
+    localStorage.setItem("todos", JSON.stringify(todos));
 }
-function showActive() {
-    all.classList.add('hide');
-    active.classList.remove('hide');
-    completed.classList.add('hide');
+function getAll(){
+    const all = JSON.parse(localStorage.getItem("todos"));
+    this.todos = all;
 }
-function showCompleted() {
-    all.classList.add('hide');
-    active.classList.add('hide');
-    completed.classList.remove('hide');
+function getActive(){
+    const active = JSON.parse(localStorage.getItem("todos"));
+    this.todos = active.filter((todo) => todo.completed != true);
+}
+function getCompleted(){
+    const active = JSON.parse(localStorage.getItem("todos"));
+    this.todos = active.filter((todo) => todo.completed != false);
 }
 function checkAll() {
     var checkboxes = document.querySelectorAll('.checkbox');
@@ -40,10 +44,7 @@ function checkAll() {
     var todos = JSON.parse(localStorage.getItem("todos"));
     var check = document.getElementById('btn_check');
     if (check.innerHTML == "Check All") {
-        if (!checkboxes.length > 0) {
-            alert("There is no task to check");
-        }
-        else {
+        if (checkboxes.length > 0) {
             check.innerHTML = "Uncheck All";
         }
         for ($i = 0; $i < todos.length; $i++) {
@@ -52,7 +53,7 @@ function checkAll() {
             labels[$i].classList.add('completed');
         }
     }
-    else {
+    else if(check.innerHTML == "Uncheck All"){
         check.innerHTML = "Check All";
         for ($i = 0; $i < todos.length; $i++) {
             todos[$i].completed = false;
@@ -63,8 +64,9 @@ function checkAll() {
     localStorage.setItem("todos", JSON.stringify(todos));
 }
 function delteCompleted() {
-    const complete = JSON.parse(localStorage.getItem("todos"));
-    this.todos = complete.filter(t => t.completed != true);
+    const todos = JSON.parse(localStorage.getItem("todos"));
+    this.todos = todos.filter(t => t.completed !== true);
+    localStorage.setItem('todos', JSON.stringify(this.todos));
     var check = document.getElementById('btn_check');
     check.innerHTML = "Check All";
 }
