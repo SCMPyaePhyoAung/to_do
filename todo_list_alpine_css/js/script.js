@@ -15,24 +15,7 @@ function data() {
         }
     };
 }
-var all = document.getElementById('all');
-var active = document.getElementById('active');
-var completed = document.getElementById('completed');
-function showAll() {
-    all.classList.remove('hide');
-    active.classList.add('hide');
-    completed.classList.add('hide');
-}
-function showActive() {
-    all.classList.add('hide');
-    active.classList.remove('hide');
-    completed.classList.add('hide');
-}
-function showCompleted() {
-    all.classList.add('hide');
-    active.classList.add('hide');
-    completed.classList.remove('hide');
-}
+
 function checkAll() {
     var checkboxes = document.querySelectorAll('.checkbox');
     var check = document.getElementById('btn_check');
