@@ -15,7 +15,24 @@ function data() {
         }
     };
 }
-
+var all = document.getElementById('all');
+var active = document.getElementById('active');
+var completed = document.getElementById('completed');
+function showAll() {
+    all.classList.remove('hide');
+    active.classList.add('hide');
+    completed.classList.add('hide');
+}
+function showActive() {
+    all.classList.add('hide');
+    active.classList.remove('hide');
+    completed.classList.add('hide');
+}
+function showCompleted() {
+    all.classList.add('hide');
+    active.classList.add('hide');
+    completed.classList.remove('hide');
+}
 function checkAll() {
     var checkboxes = document.querySelectorAll('.checkbox');
     var check = document.getElementById('btn_check');
@@ -46,6 +63,8 @@ function checkAll() {
     localStorage.setItem("todos", JSON.stringify(todos));
 }
 function delteCompleted() {
-    todos = todos.filter(myTask => myTask.completed != true);
-    localStorage.setItem("todos", JSON.stringify(todos));
+    const complete = JSON.parse(localStorage.getItem("todos"));
+    this.todos = complete.filter(t => t.completed != true);
+    var check = document.getElementById('btn_check');
+    check.innerHTML = "Check All";
 }
