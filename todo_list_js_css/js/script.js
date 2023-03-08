@@ -29,7 +29,7 @@ todoForm.addEventListener("submit", e => {
         total();
     }
     else {
-        alert('Please fill to do list');
+        
     }
 });
 // to filt status 
@@ -86,11 +86,11 @@ function updateTask(taskId) {
                 localStorage.setItem("todo-list", JSON.stringify(list));
             }
             else{
-                alert("Task cannot be empty");
+                
             }
         }
         else{
-            alert("Task cannot be empty");
+            
         }
         showToDo("all");
         total();
@@ -110,10 +110,7 @@ function checkAll() {
 
     var len = task_list.length;
     if (actionText.innerText == "Check All") {
-        if(task_list.length == 0){
-            alert("There is do task to check.");
-        }
-        else{
+        if(task_list.length != 0){
             actionText.innerHTML = "Uncheck All";
         }
         for ($i = 0; $i < len; $i++) {
