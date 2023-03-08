@@ -16,8 +16,9 @@
       <h1 class="main-ttl">Todo</h1>
       <div class="form-blk">
         <form
-          @submit.stop.prevent="todos = [].concat({ id: badId(), text: newTodo, completed: false }, todos); newTodo = '';">
-          <input type="text" name="todo" id="todo" class="text-box todo" placeholder="Add new..." x-model="newTodo" />
+          @submit.stop.prevent="todos = [].concat({ id: todos.length+1, text: newTodo, completed: false }, todos); newTodo = '';">
+          <input type="text" name="todo" id="todo" class="text-box todo" placeholder="Add new..." x-model="newTodo"
+            required />
           <button class="btn btn-submit">+</button>
         </form>
       </div>
@@ -71,9 +72,7 @@
               <label class="task_name" x-text="todo.text" x-bind:class="{'completed': todo.completed}" @click.prevent
                 @dblclick="updateTask" x-show="!isEditing"></label>
               <input type="text" class="editTextBox" x-model="todo.text" x-show="isEditing" @click.away="updateTask"
-                @keydown.enter="disableEditing" @keydown.window.escape="disableEditing"
-                class=""
-                x-ref="input">
+                @keydown.enter="disableEditing" @keydown.window.escape="disableEditing" class="" x-ref="input">
             </div>
             <b class="delete" @click="todos = todos.filter(t => t.id !== todo.id)">x</b>
             </p>
@@ -83,7 +82,7 @@
       <h5 class="total"><span x-text="todos.filter((todo) => todo.completed != true).length"></span> items left</h5>
       <div class="btn-group">
         <button class="btn btn-action" id="btn_check" @click="checkAll">Check All</button>
-        <button class="btn btn-action" @click="todos = todos.filter(t => t.completed != true)">
+        <button class="btn btn-action" @click="todos = todos.filter(myTask => myTask.completed !== true)">
           Clear Completed
         </button>
       </div>

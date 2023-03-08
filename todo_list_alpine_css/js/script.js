@@ -1,6 +1,3 @@
-function badId() {
-    return (Math.random() * 100).toFixed(0);
-}
 function data() {
     return {
         text: "Example text. Double click to edit",
@@ -43,10 +40,15 @@ function checkAll() {
     var todos = JSON.parse(localStorage.getItem("todos"));
     var check = document.getElementById('btn_check');
     if (check.innerHTML == "Check All") {
-        check.innerHTML = "Uncheck All";
+        if (!checkboxes.length > 0) {
+            alert("There is no task to check");
+        }
+        else {
+            check.innerHTML = "Uncheck All";
+        }
         for ($i = 0; $i < todos.length; $i++) {
             todos[$i].completed = true;
-            checkboxes[$i].checked=true;
+            checkboxes[$i].checked = true;
             labels[$i].classList.add('completed');
         }
     }
@@ -54,9 +56,13 @@ function checkAll() {
         check.innerHTML = "Check All";
         for ($i = 0; $i < todos.length; $i++) {
             todos[$i].completed = false;
-            checkboxes[$i].checked=false;
+            checkboxes[$i].checked = false;
             labels[$i].classList.remove('completed');
         }
     }
+    localStorage.setItem("todos", JSON.stringify(todos));
+}
+function delteCompleted() {
+    todos = todos.filter(myTask => myTask.completed != true);
     localStorage.setItem("todos", JSON.stringify(todos));
 }
