@@ -75,7 +75,6 @@ function editTaskList(taskId, taskName) {
     textBox[taskId].classList.add("editTextBox");
     task_name[taskId].classList.add('hide');
     closeBtn[taskId].classList.add('hide');
-    var test = task_name.closest('.edit');
 }
 function updateTask(taskId) {
     var textBox = document.getElementsByClassName("edit");
