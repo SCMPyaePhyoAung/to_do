@@ -29,7 +29,7 @@ todoForm.addEventListener("submit", e => {
         total();
     }
     else {
-        alert("Task cannot be empty");
+        
     }
 });
 // to filt status 
@@ -90,14 +90,14 @@ function updateTask(taskId) {
                 localStorage.setItem("todo-list", JSON.stringify(list));
             }
             else {
-                alert("Task cannot be empty");
+                
             }
             showToDo("all");
             total();
         })
     }
     else {
-        alert("Task cannot be empty");
+        
     }
 }
 function editTask(taskId, taskName) {
