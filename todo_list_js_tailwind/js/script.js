@@ -119,12 +119,10 @@ function checkAll() {
 
     var len = task_list.length;
     if (actionText.innerText == "Check All") {
-        if (!task_list.length > 0) {
-            alert("There is no task to check");
-        }
-        else {
+        if (task_list.length > 0) {
             actionText.innerHTML = "Uncheck All";
         }
+       
         for ($i = 0; $i < len; $i++) {
             task_list[$i].classList.add("checked");
             checkboxes[$i].checked = true;
@@ -147,7 +145,7 @@ function checkAll() {
 function deleteAllComplete() {
     list = list.filter(todo => todo.status != "completed");
     localStorage.setItem("todo-list", JSON.stringify(list));
-    actionText.innerHTML = "Uncheck All";
+    actionText.innerHTML = "Check All";
     showToDo("all");
     total();
 }
