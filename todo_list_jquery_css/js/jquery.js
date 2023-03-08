@@ -28,7 +28,7 @@ $(document).ready(function () {
             total();
         }
         else {
-            alert("Task cannot be empty.");
+            
         }
 
     });
@@ -105,9 +105,6 @@ $(document).ready(function () {
             list[id].task = $(this).val();
             localStorage.setItem("task", JSON.stringify(list));
         }
-        else {
-            alert("Task cannot be empty.");
-        }
         showData("all");
 
     });
@@ -115,7 +112,9 @@ $(document).ready(function () {
     $("#btn-checkall").click(function () {
         var len = $('.task_name').length;
         if ($(this).text() == "Check All") {
-            $(this).text("Uncheck All");
+            if(len!=0){
+                $(this).text("Uncheck All");
+            }
             for ($i = 0; $i < len; $i++) {
                 $(".checkbox").attr("checked", true);
                 list[$i].status = "completed";
