@@ -1,8 +1,14 @@
 function data() {
     return {
+        text: "Example text. Double click to edit",
         isEditing: false,
         updateTask() {
             this.isEditing = !this.isEditing;
+            if (this.isEditing) {
+                this.$nextTick(() => {
+                    this.$refs.input.focus();
+                });
+            }
         },
         disableEditing() {
             this.isEditing = false;
@@ -34,7 +40,12 @@ function checkAll() {
     var todos = JSON.parse(localStorage.getItem("todos"));
     var check = document.getElementById('btn_check');
     if (check.innerHTML == "Check All") {
-        check.innerHTML = "Uncheck All";
+        if (!checkboxes.length > 0) {
+            alert("There is no task to check");
+        }
+        else {
+            check.innerHTML = "Uncheck All";
+        }
         for ($i = 0; $i < todos.length; $i++) {
             todos[$i].completed = true;
             checkboxes[$i].checked = true;
@@ -50,4 +61,10 @@ function checkAll() {
         }
     }
     localStorage.setItem("todos", JSON.stringify(todos));
+}
+function delteCompleted() {
+    const complete = JSON.parse(localStorage.getItem("todos"));
+    this.todos = complete.filter(t => t.completed != true);
+    var check = document.getElementById('btn_check');
+    check.innerHTML = "Check All";
 }
