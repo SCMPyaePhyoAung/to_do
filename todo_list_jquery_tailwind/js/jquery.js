@@ -13,9 +13,6 @@ $(document).ready(function () {
             list.push(task);
             localStorage.setItem("task", JSON.stringify(list));
         }
-        else {
-            alert("Task cannot be empty.");
-        }
         $("#input").val("");
         total();
         showData("all");
@@ -97,9 +94,6 @@ $(document).ready(function () {
             list[id].task = $(this).val().trim();
             localStorage.setItem("task", JSON.stringify(list));
         }
-        else {
-            alert("Task cannnot be empty");
-        }
         total();
         showData("all");
     });
@@ -108,10 +102,7 @@ $(document).ready(function () {
         $(".task_name").toggleClass("checked");
         var len = $('.task_name').length;
         if ($(this).text() == "Check All") {
-            if (!len > 0) {
-                alert("There is no task to check");
-            }
-            else {
+            if (len != 0) {
                 $(this).text("Uncheck All");
             }
             for ($i = 0; $i < len; $i++) {
