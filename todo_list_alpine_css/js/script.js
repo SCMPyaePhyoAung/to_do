@@ -10,30 +10,49 @@ function data() {
                 });
             }
         },
-        disableEditing() {
+        disableEditing(textbox, taskId, taskName) {
             this.isEditing = false;
-        }
+
+            var value = JSON.parse(localStorage.getItem("todos"));
+            var tasks = value.filter(function (data) {
+                return data.id == taskId;
+            });
+            var task = tasks[0].text;
+            textbox.addEventListener("blur", function (event) {
+                if (textbox.value.trim() === "") {
+
+                    textbox.parentNode.previousElementSibling.innerText = task;
+                    textbox.value = task;
+                }
+            });
+            localStorage.setItem("todos", JSON.stringify(this.todos));
+        },
     };
 }
-function changeStatus(id){
-    var todos = JSON.parse(localStorage.getItem("todos"));
-    if(todos[id-1].completed == false){
-        todos[id-1].completed = true;
+function changeStatus(checkbox, taskId) {
+    todos = JSON.parse(localStorage.getItem("todos"));
+    if (checkbox.checked) {
+        var value = this.todos.filter(function (todo) {
+            return todo.id == taskId;
+        });
+        value[0].completed = true;
+    } else {
+        var value = this.todos.filter(function (todo) {
+            return todo.id == taskId;
+        });
+        value[0].completed = false;
     }
-    else{
-        todos[id-1].completed = false;
-    }
-    localStorage.setItem("todos", JSON.stringify(todos));
+    localStorage.setItem("todos", JSON.stringify(this.todos));
 }
-function getAll(){
+function getAll() {
     const all = JSON.parse(localStorage.getItem("todos"));
     this.todos = all;
 }
-function getActive(){
+function getActive() {
     const active = JSON.parse(localStorage.getItem("todos"));
     this.todos = active.filter((todo) => todo.completed != true);
 }
-function getCompleted(){
+function getCompleted() {
     const active = JSON.parse(localStorage.getItem("todos"));
     this.todos = active.filter((todo) => todo.completed != false);
 }
@@ -41,27 +60,26 @@ function checkAll() {
     var checkboxes = document.querySelectorAll('.checkbox');
     var check = document.getElementById('btn_check');
     var labels = document.querySelectorAll('.task_name');
-    var todos = JSON.parse(localStorage.getItem("todos"));
     var check = document.getElementById('btn_check');
     if (check.innerHTML == "Check All") {
         if (checkboxes.length > 0) {
             check.innerHTML = "Uncheck All";
         }
-        for ($i = 0; $i < todos.length; $i++) {
-            todos[$i].completed = true;
+        for ($i = 0; $i < this.todos.length; $i++) {
+            this.todos[$i].completed = true;
             checkboxes[$i].checked = true;
             labels[$i].classList.add('completed');
         }
     }
-    else if(check.innerHTML == "Uncheck All"){
+    else if (check.innerHTML == "Uncheck All") {
         check.innerHTML = "Check All";
-        for ($i = 0; $i < todos.length; $i++) {
-            todos[$i].completed = false;
+        for ($i = 0; $i < this.todos.length; $i++) {
+            this.todos[$i].completed = false;
             checkboxes[$i].checked = false;
             labels[$i].classList.remove('completed');
         }
     }
-    localStorage.setItem("todos", JSON.stringify(todos));
+    localStorage.setItem("todos", JSON.stringify(this.todos));
 }
 function delteCompleted() {
     const todos = JSON.parse(localStorage.getItem("todos"));

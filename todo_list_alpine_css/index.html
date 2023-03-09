@@ -10,21 +10,19 @@
 </head>
 
 <body>
-  <div class="container" x-data="{ todos : [], 
+  <div class="container" x-data="{ todos : [],
                                     addTask(task){
                                       this.todos.push(task);
                                       localStorage.setItem('todos', JSON.stringify(this.todos));
                                       todos = JSON.parse(localStorage.getItem('todos'));
                                     },
                                   name:'',
-                                }"
-    >
+                                }">
     <div class="card">
       <h1 class="main-ttl">Todo</h1>
       <div class="form-blk">
         <form @submit.stop.prevent="addTask({ id: todos.length+1, task: name, completed: false}); name = '';">
-          <input type="text" name="todo" id="todo" class="text-box todo" placeholder="Add new..." x-model="name"
-             />
+          <input type="text" name="todo" id="todo" class="text-box todo" placeholder="Add new..." x-model="name" />
           <button class="btn btn-submit" type="submit">+</button>
         </form>
       </div>
@@ -38,20 +36,23 @@
           <li class="list flex my-3">
             <p class="list-blk">
             <div class="task_group" x-data="data">
-              <input type="checkbox" class="checkbox" x-model="todo.completed" @click="changeStatus(todo.id)">
+              <input type="checkbox" class="checkbox" x-model="todo.completed"
+                @click="changeStatus(event.target,todo.id)">
               <label class="task_name" x-text="todo.task" x-bind:class="{'completed': todo.completed}" @click.prevent
                 @dblclick="updateTask" x-show="!isEditing"></label>
               <input type="text" x-model="todo.task" x-show="isEditing" @click.away="updateTask"
-                @keydown.enter="disableEditing" @keydown.window.escape="disableEditing"
+                @keydown.enter="disableEditing(event.target,todo.id,todo.task)" @keydown.window.escape="disableEditing(event.target,todo.id,todo.task)"
                 class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 appearance-none leading-normal w-128"
                 x-ref="input">
             </div>
-            <b class="delete" @click="todos = todos.filter(t => t.id !== todo.id), localStorage.setItem('todos', JSON.stringify(todos));">x</b>
+            <b class="delete"
+              @click="todos = todos.filter(t => t.id !== todo.id), localStorage.setItem('todos', JSON.stringify(todos));">x</b>
             </p>
           </li>
         </template>
       </ul>
-      <h5 class="total"><span x-text="this.todos = todos.filter((todo) => todo.completed != true).length"></span> items left</h5>
+      <h5 class="total"><span x-text="this.todos = todos.filter((todo) => todo.completed != true).length"></span> items
+        left</h5>
       <div class="btn-group">
         <button class="btn btn-action" id="btn_check" @click="checkAll">Check All</button>
         <button class="btn btn-action" @click="delteCompleted">
@@ -60,6 +61,7 @@
       </div>
     </div>
   </div>
+
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="js/script.js"></script>
 </body>
