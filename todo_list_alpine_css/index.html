@@ -10,14 +10,7 @@
 </head>
 
 <body>
-  <div class="container" x-data="{ todos : [],
-                                    addTask(task){
-                                      this.todos.push(task);
-                                      localStorage.setItem('todos', JSON.stringify(this.todos));
-                                      todos = JSON.parse(localStorage.getItem('todos'));
-                                    },
-                                  name:'',
-                                }">
+  <div class="container" x-data="data">
     <div class="card">
       <h1 class="main-ttl">Todo</h1>
       <div class="form-blk">
@@ -35,7 +28,7 @@
         <template x-for="todo in todos">
           <li class="list flex my-3">
             <p class="list-blk">
-            <div class="task_group" x-data="data">
+            <div class="task_group" x-data+="updateData()">
               <input type="checkbox" class="checkbox" x-model="todo.completed"
                 @click="changeStatus(event.target,todo.id)">
               <label class="task_name" x-text="todo.task" x-bind:class="{'completed': todo.completed}" @click.prevent
