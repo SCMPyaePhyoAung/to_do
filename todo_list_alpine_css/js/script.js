@@ -6,9 +6,11 @@ function data() {
         
         todos : todos,
         addTask(task){
-            this.todos =JSON.parse(localStorage.getItem("todos")) == null? []: JSON.parse(localStorage.getItem("todos"));
-            this.todos.push(task);
-            localStorage.setItem('todos', JSON.stringify(this.todos));
+            if(task.task.trim().length > 0){
+                this.todos =JSON.parse(localStorage.getItem("todos")) == null? []: JSON.parse(localStorage.getItem("todos"));
+                this.todos.push(task);
+                localStorage.setItem('todos', JSON.stringify(this.todos));
+            }
         },
         name:'',
       
