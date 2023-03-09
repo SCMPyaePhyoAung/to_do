@@ -11,9 +11,7 @@
 </head>
 
 <body class="">
-  <div class="container bg-stone-50 mx-auto my-auto p-5 w-1/2 mt-20 shadow-md"" x-data=" { todos : [], addTask(task){
-    this.todos.push(task); localStorage.setItem('todos', JSON.stringify(this.todos));
-    todos=JSON.parse(localStorage.getItem('todos')); }, name:'', }">
+  <div class="container bg-stone-50 mx-auto my-auto p-5 w-1/2 mt-20 shadow-md"" x-data="data()">
 
     <div class="">
       <h1 class="py-2 font-semibold">Todo</h1>
@@ -44,7 +42,7 @@
       <ul class="resultList">
         <template x-for="todo in todos">
           <li class="list my-3">
-            <div class="flex" x-data="data()">
+            <div class="flex" x-data="updateData()">
               <input type="checkbox" class="mr-2 my-auto checkbox" x-model="todo.completed"
                 @click="changeStatus(event.target,todo.id)">
               <label class="task_name my-auto" x-text="todo.task" x-bind:class="{'completed': todo.completed}"
