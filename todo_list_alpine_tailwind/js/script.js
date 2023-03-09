@@ -47,10 +47,9 @@ function data() {
             var checkboxes = document.querySelectorAll('.checkbox');
             var check = document.getElementById('btn_check');
             var labels = document.querySelectorAll('.task_name');
-            var check = document.getElementById('btn_check');
-            if (check.innerHTML == "Check All") {
+            if (check.innerText == "Check All") {
                 if (checkboxes.length > 0) {
-                    check.innerHTML = "Uncheck All";
+                    check.innerText = "Uncheck All";
                 }
                 for ($i = 0; $i < this.todos.length; $i++) {
                     this.todos[$i].completed = true;
@@ -58,8 +57,8 @@ function data() {
                     labels[$i].classList.add('completed');
                 }
             }
-            else if (check.innerHTML == "Uncheck All") {
-                check.innerHTML = "Check All";
+            else if (check.innerText == "Uncheck All") {
+                check.innerText = "Check All";
                 for ($i = 0; $i < this.todos.length; $i++) {
                     this.todos[$i].completed = false;
                     checkboxes[$i].checked = false;
@@ -73,7 +72,7 @@ function data() {
             this.todos = todos.filter(t => t.completed !== true);
             localStorage.setItem('todos', JSON.stringify(this.todos));
             var check = document.getElementById('btn_check');
-            check.innerHTML = "Check All";
+            check.innerText = "Check All";
         }
     };
 }
